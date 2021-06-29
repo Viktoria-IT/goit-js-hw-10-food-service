@@ -5,65 +5,67 @@ import './sass/main.scss';
 
 
 
-
-const menuOrder = document.querySelector('.js-menu');
-menuOrder.insertAdjacentHTML('afterbegin', eventsTemplates(menuEvents));
-
 const Theme = {
   LIGHT: 'light-theme',
   DARK: 'dark-theme',
 };
 
-const swichToggleTheme = document.querySelector('.js-theme-switch__toggle');
-const bodyTheme = document.querySelector('body');
-// upCurrentTheme();
-let isLightTheme = true;
-swichToggleTheme.addEventListener('change', (e) => {
-   // swichToggleTheme.checked;
-   const savedTheme = e.target.value;
-   e.preventDefault();
-   
-   if (isLightTheme) {
-      //dark
-      upCurrentTheme();
-      bodyTheme.classList.remove('light-theme');
-      bodyTheme.classList.add('dark-theme');
-      localStorage.removeItem('light-theme', savedTheme);
-      localStorage.getItem('dark-theme');
-      localStorage.setItem('dark-theme', savedTheme)
-      swichToggleTheme.checked = true;
-   }
-   else  {
-   //light
-      bodyTheme.classList.remove('dark-theme');
-      bodyTheme.classList.add('light-theme');
-      localStorage.removeItem('dark-theme', savedTheme);
-      upCurrentTheme();
-      localStorage.setItem('light-theme', savedTheme);
-   }
-   isLightTheme = !isLightTheme;
-});
 
-function upCurrentTheme() {
-   let currentTheme = bodyTheme.getAttribute('dark-theme');
-   let theme = "";
-   if (currentTheme == Theme.DARK) {
-      currentTheme = Theme.DARK;
-    
-   }
-   else {
-      currentTheme = Theme.LIGHT;
-    
-   }
-   bodyTheme.setAttribute('dark-theme', currentTheme);
-return theme
-   
-   // bodyTheme.value = localStorage.getItem('dark-theme');
-   //  let currentThemedark = Theme.DARK;
-   //    if (currentThemedark === 'dark-theme') {
-   //    bodyTheme.classList.add('dark-theme');
-   //    }
+const menu = document.querySelector('.js-menu');
+menu.insertAdjacentHTML('afterbegin', eventsTemplates(menuEvents));
+
+const body = document.querySelector('body');
+const input = document.querySelector('#theme-switch-toggle');
+
+const setItem = (addItemList, removeItemList) => {
+    body.classList.add(`${addItemList}`);
+    body.classList.remove(`${removeItemList}`);
 };
- 
- 
-   
+
+const onInputTheme = (e) => {
+    if (input.checked) {
+        setItem(Theme.DARK, Theme.LIGHT);
+    } else {
+        setItem(Theme.LIGHT, Theme.DARK);
+    }   
+};
+
+const settingThemeLocalhost = (e) => {
+    if (input.checked) {
+        localStorage.setItem('theme', Theme.DARK);
+    } else {
+        localStorage.removeItem('theme');
+        localStorage.setItem('theme', Theme.LIGHT);
+    }
+};
+
+if (localStorage.getItem('theme') === Theme.DARK) {
+    body.classList.add(Theme.DARK);
+    input.checked = true;
+};
+
+input.addEventListener('change', onInputTheme);
+input.addEventListener('change', settingThemeLocalhost);
+
+
+
+// // Установка темной темы
+// function checkedInput() {
+//   document.body.classList.add(Theme.DARK);
+//   document.body.classList.remove(Theme.LIGHT);
+//   localStorage.setItem('theme', Theme.DARK);
+//   inputRef.checked = true;
+// }
+
+// // Установка светлой темы
+// function notCheckedInput() {
+//   document.body.classList.add(Theme.LIGHT);
+//   document.body.classList.remove(Theme.DARK);
+//   localStorage.setItem('theme', Theme.LIGHT);
+//   inputRef.checked = false;
+// }
+
+
+// const theme = document.localStorage('theme') || Theme.LIGHT;
+// document.body.classList.add(theme);
+// swichToggleTheme.checked = theme === Theme.DARK;
